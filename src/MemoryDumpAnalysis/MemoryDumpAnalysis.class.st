@@ -6,14 +6,16 @@ Class {
 		'label',
 		'view',
 		'file',
-		'readStream'
+		'readStream',
+		'bitmap',
+		'extent'
 	],
 	#category : #MemoryDumpAnalysis
 }
 
 { #category : #'instance creation' }
 MemoryDumpAnalysis >> decreaseIndex [
-	index := index - 10.
+	index := index - self step.
 	index <= 0 ifTrue: [ index := 0 ].
 	self updatePosition.
 	self updateLabel.
@@ -43,7 +45,7 @@ MemoryDumpAnalysis >> getFormFor: extent [
 
 { #category : #'instance creation' }
 MemoryDumpAnalysis >> increaseIndex [
-	index := index + 10.
+	index := index + self step.
 	self updatePosition.
 	self updateLabel.
 	self updateBitmap
@@ -58,28 +60,31 @@ MemoryDumpAnalysis >> initialize [
 { #category : #'instance creation' }
 MemoryDumpAnalysis >> open [
 	<script: 'self new open'>
-	| extent aForm b |
-	file := '/Users/alexandrebergel/Desktop/Yang_nature_book_part.pdf' asFileReference.
+	file := '/Users/alexandrebergel/Desktop/GCORE/test.txt' asFileReference.
 	readStream := file binaryReadStream.
 	
 	view := RTView new.
-	extent := 300 @ 300.
+	extent := 800 @ 500.
 	view addMenu: '<<' callback: [ self decreaseIndex ].
 	view addMenu: '>>' callback: [ self increaseIndex ].
-	aForm := self getFormFor: extent.
-	b := RTBitmap new
-		form: aForm;
-		element.
-	view add: b.
+	bitmap := RTBitmap new
+		form: #yourself;
+		elementOn: (self getFormFor: extent).
+	view add: bitmap.
 	label := RTLabel new elementOn: 10.
 	view add: label.
-	TRConstraint move: label onTheLeftOf: b.
+	TRConstraint move: label onTheLeftOf: bitmap.
 	view inspect
 ]
 
 { #category : #'instance creation' }
+MemoryDumpAnalysis >> step [
+	^ extent x * 3 * 30
+]
+
+{ #category : #'instance creation' }
 MemoryDumpAnalysis >> updateBitmap [
-	
+	bitmap trachelShape form: (self getFormFor: extent)
 ]
 
 { #category : #'instance creation' }
@@ -94,8 +99,6 @@ MemoryDumpAnalysis >> updatePosition [
 ]
 
 { #category : #'instance creation' }
-MemoryDumpAnalysis >> valueFromStream [
-	| result |
-	result := readStream nextInt32.
-	^ 16rFF * 256 * 256 * 256 + result
+MemoryDumpAnalysis >> valueFromStream [	
+	^ 16rFF * 256 * 256 * 256 + (readStream uint8 * 256 * 256) + (readStream uint8 * 256) + (readStream uint8)
 ]
