@@ -60,7 +60,10 @@ MemoryDumpAnalysis >> initialize [
 { #category : #'instance creation' }
 MemoryDumpAnalysis >> open [
 	<script: 'self new open'>
-	file := '/Users/alexandrebergel/Desktop/GCORE/test.txt' asFileReference.
+	"Example to generate a dump:
+	gcore -o ~/Desktop/finder.txt 2287
+	"
+	file := '/Users/alexandrebergel/Desktop/gcore.txt' asFileReference.
 	readStream := file binaryReadStream.
 	
 	view := RTView new.
