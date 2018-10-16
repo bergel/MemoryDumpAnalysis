@@ -63,7 +63,7 @@ MemoryDumpAnalysis >> open [
 	"Example to generate a dump:
 	gcore -o ~/Desktop/finder.txt 2287
 	"
-	file := '/Users/alexandrebergel/Desktop/gcore.txt' asFileReference.
+	file := '/Users/alexandrebergel/Desktop/finder.txt' asFileReference.
 	readStream := file binaryReadStream.
 	
 	view := RTView new.
