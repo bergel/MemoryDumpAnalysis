@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'index',
 		'address',
-		'size',
 		'addressAsString'
 	],
 	#category : #'MemoryDumpAnalysis-TraceAnalysis'
@@ -49,14 +48,4 @@ TAEvent >> isFree [
 { #category : #'public - testing' }
 TAEvent >> isMalloc [
 	^ false
-]
-
-{ #category : #accessing }
-TAEvent >> size1 [
-	^ size
-]
-
-{ #category : #accessing }
-TAEvent >> size: anObject [
-	size := anObject
 ]
