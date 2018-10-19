@@ -96,6 +96,14 @@ TAModel >> frees [
 ]
 
 { #category : #visualizations }
+TAModel >> gtInspectorGraphIn: composite [
+	<gtInspectorPresentationOrder: -10>
+	composite roassal2
+		title: 'Graph';
+		initializeView: [ self produceGraph ]
+]
+
+{ #category : #visualizations }
 TAModel >> gtInspectorSummaryIn: composite [
 	<gtInspectorPresentationOrder: -10>
 	composite text
@@ -143,23 +151,46 @@ TAModel >> numberOfMallocs [
 ]
 
 { #category : #visualizations }
+TAModel >> produceGraph [
+	| min g d nodes |
+	min := (self mallocs collect: #address) min.
+	g := RTGrapher new.
+
+	d := RTData new.
+	d dotShape color: Color blue trans.
+	nodes := d points: self mallocs.
+	d x: [ :e | e address - min ].
+	d y: #index.
+	d xLog.
+	g add: d.
+
+	g build.
+
+	RTMetricNormalizer new
+		elements: nodes;
+		normalizeSize: #size.
+	^ g view.
+]
+
+{ #category : #visualizations }
 TAModel >> produceView [
 
 	| v elements |
 	v := RTView new.
 	
-	elements := RTBox new height: 40; color: [:m | Color random trans ]; elementsOn: self mallocs.
+	elements := RTBox new height: 10; elementsOn: self mallocs.
 	v addAll: elements.
-	elements @ RTPopup.
-	
+	elements @ RTPopup @ RTHighlightable.
+ 
 	RTMetricNormalizer new
 		view: v;
 		elements: elements;
 		normalizeWidth: #size;
-		normalizeTopLeftOfX: #address min: 0 max: 200
-		"normalizeX: #address;
-		normalizeColor: #index."
-	.
-	RTGridLayout on: elements.
+		normalizeTopLeftOfX: #address min: 0 max: 200;
+		normalizeY: #index;
+		normalizeColor: #index.
+		
+
+	"RTGridLayout on: elements."
 	^ v
 ]
