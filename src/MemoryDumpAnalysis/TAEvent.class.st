@@ -27,7 +27,8 @@ TAEvent >> addressAsString [
 
 { #category : #accessing }
 TAEvent >> addressAsString: aString [
-	addressAsString := aString
+	addressAsString := aString.
+	self address: (Number readFrom: (aString copyFrom: 3 to: aString size) base: 16)
 ]
 
 { #category : #accessing }

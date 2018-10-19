@@ -23,16 +23,27 @@ TAModel >> addAsString: aString [
 		(ss second beginsWith: 'free') ifTrue: [
 			event := TAFree new addressAsString: ss third.
 		].
-		events add: event
+		events add: event.
+		event index: events size.
 	].
 	
 	
+]
+
+{ #category : #'public - metrics' }
+TAModel >> frees [
+	^ events select: #isFree
 ]
 
 { #category : #initialization }
 TAModel >> initialize [
 	super initialize.
 	events := OrderedCollection new
+]
+
+{ #category : #'public - metrics' }
+TAModel >> mallocs [
+	^ events select: #isMalloc
 ]
 
 { #category : #'accessing - computed' }
@@ -42,10 +53,10 @@ TAModel >> numberOfEvents [
 
 { #category : #'public - metrics' }
 TAModel >> numberOfFrees [
-	^ (events select: #isFree) size
+	^ self frees size
 ]
 
 { #category : #'public - metrics' }
 TAModel >> numberOfMallocs [
-	^ (events select: #isMalloc) size
+	^ self mallocs size
 ]
