@@ -10,7 +10,7 @@ Class {
 		'bitmap',
 		'extent'
 	],
-	#category : #MemoryDumpAnalysis
+	#category : #'MemoryDumpAnalysis-DumpAnalysis'
 }
 
 { #category : #'instance creation' }
